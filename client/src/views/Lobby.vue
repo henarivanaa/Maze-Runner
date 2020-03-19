@@ -30,10 +30,13 @@ const socket = io('http://localhost:3000')
 
 export default {
   name: 'Lobby',
-  components: {
-    RoomCard
-  },
   created() {
+    if (!this.getCurrentPlayer) {
+      this.$router.push({ path: '/' })
+    }
+    socket.emit('newRoom')
+    socket.emit('newUser')
+
     socket.on('room', roomList => {
       this.setRoom(roomList)
     })
@@ -41,8 +44,6 @@ export default {
     socket.on('user', userList => {
       this.setPlayer(userList)
     })
-
-    this.getRoomList.sort((a,b) => a - b)
   },
   computed: mapGetters(['getPlayer', 'getRoomList', 'getCurrentPlayer']),
   methods: {
@@ -53,7 +54,7 @@ export default {
         players: [this.getCurrentPlayer]
       }
       socket.emit('newRoom', room)
-    }
+    },
   }
 }
 </script>
