@@ -6,7 +6,7 @@
           </div>
       </div>
     </div>
-    <div class="game-container mt-min2-vh">
+    <div class="game-container mt-min-vh">
       <h2>Number Step: {{step}}</h2>
     </div>
   </div>
@@ -95,8 +95,8 @@ export default {
      margin-left: 10%;
   }
 
-  .mt-min2-vh{
-    margin-top: -2vh
+  .mt-min-vh{
+    margin-top: -0.2vh
   }
 
 </style>
