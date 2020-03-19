@@ -5,17 +5,21 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    players: []
+    players: [],
+    roomList: [],
+  },
+  getters: {
+    getPlayer: state => state.players
   },
   mutations: {
-    addPlayer: (state, username) => {
-      state.players.push(username)
+    addPlayer: (state, userData) => {
+      state.players = userData
     },
   },
   actions: {
-    register ({ commit }, username) {
-      commit('addPlayer', username)
-    }
+    register ({ commit }, userData) {    
+      commit('addPlayer', userData)
+    },
   },
   modules: {
   }

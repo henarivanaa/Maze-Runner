@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Home</h1>
+    <h1>Welcome to Maze Runner Game</h1>
     <form @submit.prevent="onSubmit">
       <input type="text" placeholder="Input your username" v-model="username">
       <button type="submit">Enter</button>
@@ -15,9 +15,6 @@ const socket = io('http://localhost:3000')
 
 export default {
   name: 'Home',
-  created() {
-    socket.emit('lobby')
-  },
   data() {
     return {
       username: ''
@@ -26,8 +23,8 @@ export default {
   methods: {
     ...mapActions(['register']),
     async onSubmit () {
-      await this.register(this.username)
       socket.emit('newUser', this.username)
+      this.$router.push({ path: '/lobby' })
     },
   }
 }
