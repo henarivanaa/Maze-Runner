@@ -77,6 +77,7 @@ export default {
       this.step = 0;
       this.score = 1000;
       this.resultOpen = false;
+      this.hasUsedSP=false;
     },
     onKeyUp(e){
       if (this.resultOpen) return;
