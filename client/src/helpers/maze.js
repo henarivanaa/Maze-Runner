@@ -1,6 +1,11 @@
 const num_col=60;
 const num_row=20;
 
+const P_1=0;
+const P_2=1;
+const P_3=2;
+const D=3;
+
 var c_width=100/num_col;
 var c_height='35px';
 
@@ -167,9 +172,50 @@ function generateMaze(){
 
 }
 
+function generatePlayer(char,flag){
+    var pos={
+        i:-1,
+        j:-1
+    };
+
+    switch(flag){
+        case P_1:
+            pos.i=0;
+            pos.j=0;
+        break;
+        case P_2:
+            pos.i=0;
+            pos.j=num_col-1;
+        break;
+        case P_3:
+            pos.i=num_row-1;
+            pos.j=0;
+        break;
+        case D:
+            pos.i=Math.floor(num_row/2);
+            pos.j=Math.floor(num_col/2);
+        break;
+    }
+
+    var charHTML='<span style="font-size: 15px;margin-right:20px;margin-top:10px;">'+char+'</span>'
+
+    return {
+        char:charHTML,
+        pos:pos
+    };
+
+}
+
 export default {
     make:generateMaze,
     initNodes:initNodes,
+    generatePlayer,
     c_width,
-    c_height
+    c_height,
+    num_col,
+    num_row,
+    P_1,
+    P_2,
+    P_3,
+    D
 }
