@@ -203,13 +203,112 @@ function generatePlayer(char,flag){
         char:charHTML,
         pos:pos
     };
+}
 
+function generateNodeVertex(col,row){
+    var result=[];
+    for(var i=0;i<num_row;i++){
+        for(var j=0;j<num_col;j++){
+            var obj={};
+            obj.known=false;
+            obj.cost=i===row && j===col?0:Infinity;
+            obj.path=null;
+            obj.i=i;
+            obj.j=j;
+            result.push(obj);
+        }
+    }
+    return result;
+}
+
+function getCheapestVertex(vertices){
+    var cost=Infinity;
+    var v=null;
+    var cheapest_vertex=null;
+
+    for(var i=0;i<vertices.length;i++){
+        v=vertices[i];
+        if(v.cost<cost && v.known===false ){
+            cost=v.cost;
+            cheapest_vertex=v;
+        }
+    }
+    return cheapest_vertex;
+}
+
+function getNeighboors(curr_vertex,vertices,nodes){
+    var listVertices=[];
+    var curr_node=nodes[curr_vertex.i][curr_vertex.j];
+    for(var i in c_direction){
+        var dir=c_direction[i];
+        var next_i=curr_vertex.i+dir.i;
+        var next_j=curr_vertex.j+dir.j;
+        var next_node=nodes[next_i]?nodes[next_i][next_j]:null;
+        var next_vertex=findVertex(vertices,next_i,next_j);
+        if((next_node && curr_node.direction[i]) && (next_vertex && next_vertex.known===false )){
+            next_vertex.dir=i;
+            listVertices.push(next_vertex);
+        }
+    }
+    return listVertices;
+}
+
+function findVertex(vertices,i,j){
+    return vertices.find(v=>v.i===i && v.j===j );
+}
+
+function spList(destination_vertex,vertices,nodes){
+    var curr=destination_vertex;
+    var result=[];
+
+    while(curr){
+        var path=curr.path;
+        var node=nodes[curr.i][curr.j];
+        node.isSP=true;
+        result.push(curr);
+     
+
+        if(path)
+            curr=findVertex(vertices,path.i,path.j);
+        else
+            curr=null;
+    }
+    return result;
+}
+
+function getShortestPath(start,destination,nodes){
+    var vertices=generateNodeVertex(start.j,start.i);
+    var curr_vertex=null;
+    var neighboors=null;
+    var cost=0;
+    curr_vertex=getCheapestVertex(vertices);
+
+    do{
+        curr_vertex.known=true;
+        neighboors=getNeighboors(curr_vertex,vertices,nodes);
+        cost=curr_vertex.cost;
+
+        for(var i=0;i<neighboors.length;i++){
+            var neighboor=neighboors[i];
+            if(neighboor.cost>cost+1){
+                neighboor.cost=cost+1;
+                neighboor.path={i:curr_vertex.i,j:curr_vertex.j};
+            }
+        }
+        curr_vertex=getCheapestVertex(vertices);
+
+    }while(curr_vertex!==null);
+
+    var destination_vertex=findVertex(vertices,destination.i,destination.j);
+
+    return spList(destination_vertex,vertices,nodes);
 }
 
 export default {
     make:generateMaze,
     initNodes:initNodes,
     generatePlayer,
+    getShortestPath,
     c_width,
     c_height,
     num_col,
