@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 // import Home from '../views/Home.vue'
 import JoinRoom from '../views/JoinRoom.vue'
 import Room from '../views/Room.vue'
+import Home from '../views/Home.vue'
+import Lobby from '../views/Lobby.vue'
 
 Vue.use(VueRouter)
 
@@ -30,6 +32,16 @@ const routes = [
   //   // which is lazy-loaded when the route is visited.
   //   component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   // }
+  {
+    path: '/',
+    name: 'Home',
+    component: Home,
+  },
+  {
+    path: '/lobby',
+    name: 'Lobby',
+    component: Lobby,
+  },
 ]
 
 const router = new VueRouter({
