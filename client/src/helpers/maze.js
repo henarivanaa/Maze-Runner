@@ -1,5 +1,5 @@
-const num_col=60;
-const num_row=18;
+const num_col=15;
+const num_row=8;
 
 const P_1=0;
 const P_2=1;
@@ -197,7 +197,7 @@ function generatePlayer(char,flag){
         break;
     }
 
-    var charHTML='<span style="font-size: 15px;margin-right:20px;margin-top:10px;">'+char+'</span>'
+    var charHTML='<span style="font-size: 15px;text-align:center;margin-top:10px;">'+char+'</span>'
 
     return {
         char:charHTML,
