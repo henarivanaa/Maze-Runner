@@ -5,30 +5,32 @@
       <h5 class="card-title">Room {{ room.id }}</h5>
       <p class="card-text">Players:</p>
       <div class="ul">
-        <div v-for="(player, index) in room.players" :key="index" class="li">{{ player.name }}</div>
+        <div v-for="(player, index) in room.players" :key="index" class="li">{{ player }}</div>
       </div>
-      <button class="btn btn-primary btn-block" @click="onJoin(room.id)">Join</button>
+      <button class="btn btn-primary btn-block" @click="onJoin()">Join</button>
     </div>
   </div>
 </template>
 
 <script>
-// import { mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
+import io from 'socket.io-client'
+const socket = io('http://localhost:3000')
 
 export default {
   name: 'RoomCard',
   props: ['room'],
   methods: {
+    ...mapGetters(['getCurrentPlayer']),
     ...mapActions(['joinRoom']),
     async onJoin () {
-      this.joinRoom(this.username)
-      socket.emit('newUser', this.username)
-      socket.emit('newRoom')
-      this.$router.push({ path: '/lobby' })
+      this.$store.getters.getOneRoom(this.room.id).players.push(this.getCurrentPlayer)
+      // console.log(this.$store.getters.getOneRoom(this.room.id).players)
+      // console.log(this.getCurrentPlayer())
+      // this.joinRoom()
+      // socket.emit('')
+      this.$router.push({ path: '/room' })
     },
-    gotoRoom(roomId) {
-      this.$router.push('/room/'+roomId)
-    }
   }
 }
 </script>

@@ -30,6 +30,9 @@ const socket = io('http://localhost:3000')
 
 export default {
   name: 'Lobby',
+  components: {
+    RoomCard
+  },
   created() {
     if (!this.getCurrentPlayer) {
       this.$router.push({ path: '/' })
