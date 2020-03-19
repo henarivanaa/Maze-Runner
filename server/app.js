@@ -13,16 +13,21 @@ const io = require('socket.io')(server)
 
 server.listen(port, () => console.log(`listening on port *3000`))
 
-const userList = []
+const userList = {}
+const identifier = []
 const roomList = []
 
 io.on('connection', socket => {
   console.log('a user is connected')
 
   socket.on('newUser', user => {
-    userList.push(user)
-    console.log(`${user} has connected`)
-    socket.broadcast.emit('user', userList)
+    if (user) {
+      userList[socket.id] = user
+      console.log(`${user} has connected`)
+      socket.broadcast.emit('user', userList)
+    } else {
+      io.emit('user', userList)
+    }
   })
 
   socket.on('newRoom', room => {
@@ -36,7 +41,7 @@ io.on('connection', socket => {
   })
 
   socket.on('disconnect', data => {
-    console.log(`a user is disconnected`)
-    console.log(data)
+    delete userList[socket.id]
+    socket.broadcast.emit('user', userList)
   })
 })
