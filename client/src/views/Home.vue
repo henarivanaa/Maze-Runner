@@ -23,7 +23,9 @@ export default {
   methods: {
     ...mapActions(['register']),
     async onSubmit () {
+      this.register(this.username)
       socket.emit('newUser', this.username)
+      socket.emit('newRoom')
       this.$router.push({ path: '/lobby' })
     },
   }
