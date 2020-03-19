@@ -23,6 +23,12 @@ const socket = io('http://localhost:3000')
 export default {
   name: 'Lobby',
   created() {
+    if (!this.getCurrentPlayer) {
+      this.$router.push({ path: '/' })
+    }
+    socket.emit('newRoom')
+    socket.emit('newUser')
+
     socket.on('room', roomList => {
       this.setRoom(roomList)
     })
@@ -40,7 +46,7 @@ export default {
         players: [this.getCurrentPlayer]
       }
       socket.emit('newRoom', room)
-    }
+    },
   }
 }
 </script>
