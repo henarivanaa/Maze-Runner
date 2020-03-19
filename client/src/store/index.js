@@ -12,7 +12,8 @@ export default new Vuex.Store({
   getters: {
     getPlayer: state => state.players,
     getRoomList: state => state.roomList,
-    getCurrentPlayer: state => state.currentPlayer
+    getCurrentPlayer: state => state.currentPlayer,
+    getOneRoom: state => id => state.roomList.find(room => room.id == id),
   },
   mutations: {
     setPlayer: (state, userData) => {
@@ -28,7 +29,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    setPlayer ({ commit }, userData) {    
+    setPlayer ({ commit }, userData) {
       commit('setPlayer', userData)
     },
 
