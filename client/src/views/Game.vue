@@ -17,22 +17,34 @@
       </div>
 
     </div>
+    <Result
+      v-if="resultOpen"
+      v-bind:highScores="highScores"
+      v-bind:score="score"
+      v-on:restart="restart" />
   </div>
 
 </template>
 
 <script>
 import maze from '../helpers/maze';
+import Result from './Result.vue';
 
 export default {
   name: "Game",
+  components: {
+    Result,
+  },
   data(){
     return {
       maze:null,
       player:null,
       destination:null,
       step:0,
-      hasUsedSP:false
+      hasUsedSP:false,
+      score:1000,
+      resultOpen:false,
+      highScores:localStorage.scores ? JSON.parse(localStorage.scores) : []
     }
   },
   methods:{
@@ -47,7 +59,27 @@ export default {
       return null;
     },
     
+    finish() {
+      this.highScores.push({
+        name: "Player",
+        score: this.score
+      });
+      this.highScores.sort((a, b) => b.score - a.score);
+      this.highScores = this.highScores.slice(0, 5);
+      localStorage.scores = JSON.stringify(this.highScores);
+      this.resultOpen = true;
+    },
+    restart() {
+      var _maze=maze.make()
+      this.maze=_maze;
+      this.player=maze.generatePlayer('&#128561',maze.P_1);
+      this.destination=maze.generatePlayer('&#128536',maze.D);
+      this.step = 0;
+      this.score = 1000;
+      this.resultOpen = false;
+    },
     onKeyUp(e){
+      if (this.resultOpen) return;
 
       var code=e.key;
       var n=this.maze[this.player.pos.i][this.player.pos.j];
@@ -88,6 +120,10 @@ export default {
         if(n.isSP){
           n.styles['background-color']='lightgrey';
         }
+        this.score = 1000 - this.step;
+        if (this.player.pos.i === this.destination.pos.i && this.player.pos.j === this.destination.pos.j) {
+          this.finish();
+        }
       }
     },
 
@@ -97,13 +133,14 @@ export default {
 
       var sp=maze.getShortestPath(this.destination.pos,this.player.pos,this.maze);
 
-      for(var i=0;i<Math.floor(sp.length/2);i++){
+      for(var i=0;i<sp.length;i++){
         var s=sp[i];
         var curr_maze=this.maze[s.i][s.j];
         curr_maze.styles['background-color']='yellow';
       }
       this.hasUsedSP=true;
     }
+      
   },
   created(){
     var _maze=maze.make()
@@ -114,7 +151,7 @@ export default {
   mounted(){
     document.onkeyup=this.onKeyUp;
     document.body.style.overflow='hidden';
-  }
+  },
 }
 </script>
 

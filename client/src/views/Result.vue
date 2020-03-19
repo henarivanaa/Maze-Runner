@@ -2,26 +2,27 @@
     <div class="result">
         <audio src="/sounds/goal.mp3" autoplay></audio>
         <h1>You Win</h1>
-        <h1>{{ time }}</h1>
-        <div v-for="(player, index) in players" v-bind:key="player.name"
+        <h1>{{ score }}</h1>
+        <div v-for="(hs, index) in highScores" v-bind:key="index"
             class="px-3">
             <div v-if="index === 0" class="row">
                 <div class="col">
-                    <h2>{{ player.name }}</h2>
+                    <h2>{{ hs.name }}</h2>
                 </div>
                 <div class="col">
-                    <h2 class="text-right">{{ player.score }}</h2>
+                    <h2 class="text-right">{{ hs.score }}</h2>
                 </div>
             </div>
             <div v-else class="row">
                 <div class="col">
-                    <h3>{{ player.name }}</h3>
+                    <h3>{{ hs.name }}</h3>
                 </div>
                 <div class="col">
-                    <h3 class="text-right">{{ player.score }}</h3>
+                    <h3 class="text-right">{{ hs.score }}</h3>
                 </div>
             </div>
         </div>
+        <button type="button" v-on:click="$emit('restart')">PLAY AGAIN</button>
     </div>
 </template>
 
@@ -30,17 +31,7 @@
 
 export default {
   name: 'Result',
-  data() {
-    return {
-      players: [
-        { name: "Player1", score: 100 },
-        { name: "Player2", score: 97 },
-        { name: "Player3", score: 80 },
-      ],
-      time: "13:15",
-    };
-  },
-  //props: ["players", "time"],
+  props: ["highScores", "score"],
   methods: {
 
   },
@@ -64,6 +55,15 @@ h1 {
 }
 h2 {
     animation: bounce-in 1.1s linear 0s infinite;
+}
+button {
+    position: absolute;
+    bottom: 20px;
+    border: solid 5px #ccc;
+    font-size: 25px;
+    left: 50px;
+    display: block;
+    width: 280px;
 }
 @keyframes bounce-in {
     0% {
