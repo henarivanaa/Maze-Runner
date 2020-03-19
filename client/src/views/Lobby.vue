@@ -9,6 +9,7 @@
       <div v-for="(player, index) in room.players" :key="index">
         <h3>{{player}}</h3>
       </div>
+      <button @click="onJoin(room.id)" >Join</button>
     </div>
     <button @click="onCreate" >Create Room</button>
   </div>
@@ -39,14 +40,21 @@ export default {
   },
   computed: mapGetters(['getPlayer', 'getRoomList', 'getCurrentPlayer']),
   methods: {
-    ...mapActions(['setPlayer', 'setRoom']),
+    ...mapActions(['setPlayer', 'setRoom', 'setCurrentRoom']),
     onCreate() {
       const room = {
         id: this.getRoomList.length + 1,
         players: [this.getCurrentPlayer]
       }
       socket.emit('newRoom', room)
+      this.setCurrentRoom(room.id)
+      this.$router.push({ path: `/room/${room.id}` })
     },
+    onJoin(roomId) {
+      socket.emit('joinRoom', { id: roomId, name: this.getCurrentPlayer })
+      this.setCurrentRoom(roomId)
+      this.$router.push({ path: `/room/${roomId}` })
+    }
   }
 }
 </script>
