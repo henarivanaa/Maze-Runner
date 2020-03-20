@@ -40,7 +40,7 @@ export default {
   },
   computed: mapGetters(['getPlayer', 'getRoomList', 'getCurrentPlayer']),
   methods: {
-    ...mapActions(['setPlayer', 'setRoom', 'setCurrentRoom']),
+    ...mapActions(['setPlayer', 'setRoom', 'setCurrentRoom', 'setCurrentRole']),
     onCreate() {
       const room = {
         id: this.getRoomList.length + 1,
@@ -48,11 +48,13 @@ export default {
       }
       socket.emit('newRoom', room)
       this.setCurrentRoom(room.id)
+      this.setCurrentRole('host')
       this.$router.push({ path: `/room/${room.id}` })
     },
     onJoin(roomId) {
       socket.emit('joinRoom', { id: roomId, name: this.getCurrentPlayer })
       this.setCurrentRoom(roomId)
+      this.setCurrentRole('visitor')
       this.$router.push({ path: `/room/${roomId}` })
     }
   }
