@@ -63,7 +63,7 @@ export default {
       return null;
     },
     
-    finish(winner, id) {
+    finish(winner, flag) {
       this.highScores.push({
         name: winner.player,
         score: winner.score
@@ -73,12 +73,12 @@ export default {
       localStorage.scores = JSON.stringify(this.highScores);
       this.resultOpen = true;
       var audio_goal=new Audio('/sounds/goal.mp3');
-      audio_goal.play();
       var obj={
         id:this.getCurrentRoom,
         winner:winner
       }
-      if (id) {
+      if (flag) {
+        audio_goal.play();
         socket.emit('set-winner',obj);
       } 
 
@@ -143,7 +143,7 @@ export default {
             player:this.getCurrentPlayer,
             score:this.score
           }
-          this.finish(this.winner);
+          this.finish(this.winner,true);
         }
       }
     },
