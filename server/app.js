@@ -55,7 +55,7 @@ io.on('connection', socket => {
 
   socket.on('set-winner',object=>{
     let roomID=object.id;
-    socket.to(roomID).emit('get-winner',object.winner);
+    socket.to(roomID).broadcast.emit('get-winner',object.winner);
   })
   
   socket.on('join', id => {

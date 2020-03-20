@@ -162,6 +162,8 @@ export default {
       
   },
   created(){
+    socket.emit('join', this.getCurrentRoom)
+
     this.maze=this.getMaze;
     // var pos=Number(this.$rou te.id);
     this.player=maze.generatePlayer('&#128561',maze.P_1);
