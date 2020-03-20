@@ -1,15 +1,31 @@
 <template>
   <div>
-    {{getCurrentRoom}}
-    <div v-for="(user, index) in userJoined" :key="index">
-      <h4>{{user}}</h4>
-      <h4 v-if="index === 0">-- room master --</h4>
-    </div>
+    <div class="h2 my-5 text-center">Room</div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-4">
+          <img src="https://ak0.picdn.net/shutterstock/videos/9417290/thumb/1.jpg" class="w-100">
+          <div class="h3 my-3">Room {{ getCurrentRoom }}</div>
+          <p>Owner: {{ userJoined[0] }}</p>
+        </div>
+        <div class="col-4">
+          <div class="h3">Users Joined:</div>
+          <ul class="list-group">
+            <li class="list-group-item" v-for="(user, index) in userJoined" :key="index">{{ user }}</li>
+          </ul>
+          <button v-if="start" class="btn btn-success btn-block my-3" @click="a">Play</button>
+        </div>
+      <div class="col-4">
+        <div class="h3">Broadcast Message</div>
     <form @submit.prevent="send" >
       <input type="text" v-model="message">
-      <button type="submit">Send</button>
+      <button class="btn btn-primary " type="submit">Send</button>
     </form>
-    <h1>{{display}}</h1>
+    <h2>{{display}}</h2>
+      </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -25,11 +41,12 @@ export default {
     if (this.getCurrentRole === 'host') {
       this.isHost = true
     }
-
     socket.on('join', data => {
       this.userJoined = data.players
+      if (this.userJoined.length === 3 && this.getCurrentRole === 'host') {
+        this.start = true
+      }
     })
-
     socket.on('message', message => {
       this.display = message
     })
@@ -40,7 +57,8 @@ export default {
       message: '',
       display: '',
       userJoined: [],
-      isHost: false
+      isHost: false,
+      start: false
     }
   },
   methods: {

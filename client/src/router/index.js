@@ -23,7 +23,7 @@ const routes = [
   //   component: JoinRoom
   // },
   {
-    path: '/room',
+    path: '/room/:id',
     name: 'Room',
     component: Room
   },
