@@ -152,7 +152,7 @@ export default {
 
       var sp=maze.getShortestPath(this.destination.pos,this.player.pos,this.maze);
 
-      for(var i=0;i<sp.length;i++){
+      for(var i=0;i<Math.floor(sp.length/2);i++){
         var s=sp[i];
         var curr_maze=this.maze[s.i][s.j];
         curr_maze.styles['background-color']='yellow';
