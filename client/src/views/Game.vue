@@ -31,7 +31,7 @@ import maze from '../helpers/maze';
 import Result from './Result.vue';
 import { mapGetters } from 'vuex';
 import io from 'socket.io-client';
-const socket = io('http://localhost:3000')
+const socket = io('https://enigmatic-escarpment-45133.herokuapp.com/')
 
 export default {
   name: "Game",
@@ -63,7 +63,7 @@ export default {
       return null;
     },
     
-    finish(winner) {
+    finish(winner, id) {
       this.highScores.push({
         name: winner.player,
         score: winner.score
@@ -78,7 +78,9 @@ export default {
         id:this.getCurrentRoom,
         winner:winner
       }
-      socket.emit('set-winner',obj);
+      if (!id) {
+        socket.emit('set-winner',obj);
+      } 
 
     },
     restart() {
@@ -171,7 +173,7 @@ export default {
     var self=this;
     socket.on('get-winner',(winner)=>{
       console.log('Get winner',winner);
-      self.finish(winner);
+      self.finish(winner, socket.id);
     })
     window.finish=this.finish;
   },

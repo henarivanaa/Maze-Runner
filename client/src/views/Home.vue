@@ -21,7 +21,7 @@
 <script>
 import io from 'socket.io-client'
 import { mapActions } from 'vuex'
-const socket = io('http://localhost:3000')
+const socket = io('https://enigmatic-escarpment-45133.herokuapp.com/')
 
 export default {
   name: 'Home',

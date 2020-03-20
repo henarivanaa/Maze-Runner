@@ -33,7 +33,7 @@
 import { mapGetters,mapActions } from 'vuex';
 import maze from '../helpers/maze';
 import io from 'socket.io-client';
-const socket = io('http://localhost:3000')
+const socket = io('https://enigmatic-escarpment-45133.herokuapp.com/')
 
 export default {
   name: 'Room',
@@ -52,7 +52,6 @@ export default {
       this.display = message
     })
     socket.on('get-maze',maze=>{
-      console.log('Get Maze',maze);
       this.setMaze(maze);
       var idPos=Math.floor(Math.random()*3);
       var url='/game/'+idPos;
@@ -83,8 +82,6 @@ export default {
         id:this.getCurrentRoom
       }
       socket.emit('send-maze',obj);
-      console.log('Send Maze',_maze);
-
       this.setMaze(_maze);
       var idPos=Math.floor(Math.random()*3);
       var url='/game/'+idPos;

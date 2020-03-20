@@ -26,7 +26,7 @@ import io from 'socket.io-client'
 import { mapActions, mapGetters } from 'vuex'
 import RoomCard from '../components/RoomCard.vue'
 
-const socket = io('http://localhost:3000')
+const socket = io('https://enigmatic-escarpment-45133.herokuapp.com/')
 
 export default {
   name: 'Lobby',

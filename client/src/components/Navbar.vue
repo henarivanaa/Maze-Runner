@@ -15,7 +15,7 @@
 import { mapActions, mapGetters } from 'vuex'
 import io from 'socket.io-client'
 
-const socket = io('http://localhost:3000')
+const socket = io('https://enigmatic-escarpment-45133.herokuapp.com/')
 
 export default {
   name: 'Navbar',
