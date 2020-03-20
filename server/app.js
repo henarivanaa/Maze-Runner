@@ -33,11 +33,29 @@ io.on('connection', socket => {
   socket.on('newRoom', room => {
     if (room) {
       roomList.push(room)
-      console.log(`room ${room.id} has created`)
       io.emit('room', roomList)
     } else {
       io.emit('room', roomList)
     }
+  })
+
+  socket.on('joinRoom', object => {
+    roomList.forEach(room => {
+      if (room.id === object.id) {
+        room.players.push(object.name)
+      }
+    })
+    io.emit('room', roomList)
+  })
+  
+  socket.on('join', id => {
+    socket.join(id)
+    let room = roomList.filter(room => room.id === id)
+    socket.to(id).broadcast.emit('join', room)
+  })
+
+  socket.on('send-message', room => {
+    socket.to(room.id).broadcast.emit('message', room.message)
   })
 
   socket.on('disconnect', data => {

@@ -1,31 +1,53 @@
 <template>
   <div>
-    <div class="h2 my-5 text-center">Room</div>
-
-    <div class="container">
-      <div class="row">
-        <div class="col-8">
-          <img src="https://ak0.picdn.net/shutterstock/videos/9417290/thumb/1.jpg" class="w-100">
-          <div class="h3 my-3">Room #</div>
-          <p>Owner: Player #</p>
-        </div>
-        <div class="col-4">
-          <div class="h3">Player List:</div>
-          <ul class="list-group">
-            <button class="btn btn-danger btn-block">Player #</button>
-            <button class="btn btn-danger btn-block">Player #</button>
-            <button class="btn btn-danger btn-block">Player #</button>
-          </ul>
-        </div>
-      </div>
+    {{getCurrentRoom}}
+    <div v-for="(user, index) in userJoined" :key="index">
+      <h4>{{user}}</h4>
     </div>
-
+    <form @submit.prevent="send" >
+      <input type="text" v-model="message">
+      <button type="submit">Send</button>
+    </form>
+    <h1>{{display}}</h1>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import io from 'socket.io-client'
+const socket = io('http://localhost:3000')
+
 export default {
-  name: "Room",
+  name: 'Room',
+  created() {
+    socket.emit('join', this.getCurrentRoom)
+    if (this.getCurrentRole === 'host') {
+      this.isHost = true
+    }
+
+    socket.on('join', data => {
+      this.userJoined = data.players
+    })
+
+    socket.on('message', message => {
+      this.display = message
+    })
+  },
+  computed: mapGetters(['getCurrentPlayer', 'getRoomList', 'getCurrentRoom', 'getCurrentRole']),
+  data() {
+    return {
+      message: '',
+      display: '',
+      userJoined: [],
+      isHost: false
+    }
+  },
+  methods: {
+    send() {
+      this.display = this.message
+      socket.emit('send-message', { id: this.getCurrentRoom, message: this.message })
+    }
+  }
 }
 </script>
 
