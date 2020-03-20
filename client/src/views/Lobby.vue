@@ -14,6 +14,7 @@
         <h3>{{player}}</h3>
       </div>
     </div> -->
+    <!-- <button @click="onJoin(room.id)" >Join</button> -->
     <div class="container d-flex flex-row flex-wrap justify-content-around align-items-start mb-5">
       <RoomCard v-for="room in getRoomList" :key="room.id" :room="room" />
     </div>
@@ -39,25 +40,34 @@ export default {
     }
     socket.emit('newRoom')
     socket.emit('newUser')
-
     socket.on('room', roomList => {
       this.setRoom(roomList)
     })
-
     socket.on('user', userList => {
       this.setPlayer(userList)
     })
   },
-  computed: mapGetters(['getPlayer', 'getRoomList', 'getCurrentPlayer']),
+  computed: mapGetters(['getPlayer', 'getRoomList', 'getCurrentPlayer', 'getCurrentRole']),
   methods: {
-    ...mapActions(['setPlayer', 'setRoom']),
+    ...mapActions(['setPlayer', 'setRoom', 'setCurrentRoom', 'setCurrentRole']),
     onCreate() {
       const room = {
         id: this.getRoomList.length + 1,
         players: [this.getCurrentPlayer]
       }
       socket.emit('newRoom', room)
+      this.setCurrentRoom(room.id)
+      this.setCurrentRole('host')
+      console.log(this.getCurrentRole)
+      this.$router.push({ path: `/room/${room.id}` })
     },
+    onJoin(roomId) {
+      socket.emit('joinRoom', { id: roomId, name: this.getCurrentPlayer })
+      this.setCurrentRoom(roomId)
+      this.setCurrentRole('visitor')
+      console.log(this.getCurrentRole)
+      this.$router.push({ path: `/room/${roomId}` })
+    }
   }
 }
 </script>

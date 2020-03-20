@@ -21,13 +21,16 @@ export default {
   name: 'Navbar',
   computed: mapGetters(['getPlayer', 'getRoomList', 'getCurrentPlayer']),
   methods: {
-    ...mapActions(['setPlayer', 'setRoom']),
+    ...mapActions(['setPlayer', 'setRoom', 'setCurrentRoom', 'setCurrentRole']),
     onCreate() {
       const room = {
         id: this.getRoomList.length + 1,
         players: [this.getCurrentPlayer]
       }
       socket.emit('newRoom', room)
+      this.setCurrentRoom(room.id)
+      this.setCurrentRole('host')
+      this.$router.push({ path: `/room/${room.id}` })
     },
     logout() {
       this.$router.push({ path: '/' })
