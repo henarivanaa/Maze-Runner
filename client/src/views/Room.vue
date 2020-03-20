@@ -30,8 +30,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import io from 'socket.io-client'
+import { mapGetters,mapActions } from 'vuex';
+import maze from '../helpers/maze';
+import io from 'socket.io-client';
 const socket = io('http://localhost:3000')
 
 export default {
@@ -50,6 +51,13 @@ export default {
     socket.on('message', message => {
       this.display = message
     })
+    socket.on('get-maze',maze=>{
+      console.log('Get Maze',maze);
+      this.setMaze(maze);
+      var idPos=Math.floor(Math.random()*3);
+      var url='/game/'+idPos;
+      this.$router.push(url);
+    })
   },
   computed: mapGetters(['getCurrentPlayer', 'getRoomList', 'getCurrentRoom', 'getCurrentRole']),
   data() {
@@ -62,9 +70,25 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setMaze']),
     send() {
       this.display = this.message
       socket.emit('send-message', { id: this.getCurrentRoom, message: this.message })
+    },
+    a(){
+      var _maze=maze.make();
+     
+      var obj={
+        maze:_maze,
+        id:this.getCurrentRoom
+      }
+      socket.emit('send-maze',obj);
+      console.log('Send Maze',_maze);
+
+      this.setMaze(_maze);
+      var idPos=Math.floor(Math.random()*3);
+      var url='/game/'+idPos;
+      this.$router.push(url);
     }
   }
 }

@@ -1,8 +1,8 @@
 <template>
     <div class="result">
         <!-- <audio src="/sounds/goal.mp3" autoplay></audio> -->
-        <h1>You Win</h1>
-        <h1>{{ score }}</h1>
+        <h1>{{player.player}} is the winner</h1>
+        <h1>Score: {{ player.score }}</h1>
         <div v-for="(hs, index) in highScores" v-bind:key="index"
             class="px-3">
             <div v-if="index === 0" class="row">
@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-        <button type="button" v-on:click="$emit('restart')">PLAY AGAIN</button>
+        <button type="button" v-on:click="$emit('restart')">GO TO LOBBY</button>
     </div>
 </template>
 
@@ -31,7 +31,7 @@
 
 export default {
   name: 'Result',
-  props: ["highScores", "score"],
+  props: ["highScores", "player"],
   methods: {
 
   },

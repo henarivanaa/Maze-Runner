@@ -10,6 +10,7 @@ export default new Vuex.Store({
     currentPlayer: '',
     currentRoom: null,
     currentRole: null,
+    maze:null
   },
   getters: {
     getPlayer: state => state.players,
@@ -17,7 +18,8 @@ export default new Vuex.Store({
     getCurrentPlayer: state => state.currentPlayer,
     getOneRoom: state => id => state.roomList.find(room => room.id == id),
     getCurrentRoom: state => state.currentRoom,
-    getCurrentRole: state => state.currentRole
+    getCurrentRole: state => state.currentRole,
+    getMaze: state=>state.maze
   },
   mutations: {
     setPlayer: (state, userData) => {
@@ -38,6 +40,9 @@ export default new Vuex.Store({
 
     setCurrentRole: (state, role) => {
       state.currentRole = role
+    },
+    setMaze(state,maze){
+      state.maze=maze;
     }
   },
   actions: {
@@ -59,6 +64,9 @@ export default new Vuex.Store({
 
     setCurrentRole({ commit }, role) {
       commit('setCurrentRole', role)
+    },
+    setMaze({commit},maze){
+      commit('setMaze',maze);
     }
   },
   modules: {

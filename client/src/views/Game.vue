@@ -20,8 +20,8 @@
     <Result
       v-if="resultOpen"
       v-bind:highScores="highScores"
-      v-bind:score="score"
-      v-on:restart="restart" />
+      v-bind:player="winner"
+      v-on:restart="toLobby" />
   </div>
 
 </template>
@@ -29,6 +29,9 @@
 <script>
 import maze from '../helpers/maze';
 import Result from './Result.vue';
+import { mapGetters } from 'vuex';
+import io from 'socket.io-client';
+const socket = io('http://localhost:3000')
 
 export default {
   name: "Game",
@@ -44,6 +47,7 @@ export default {
       hasUsedSP:false,
       score:1000,
       resultOpen:false,
+      winner:{},  
       highScores:localStorage.scores ? JSON.parse(localStorage.scores) : []
     }
   },
@@ -59,27 +63,35 @@ export default {
       return null;
     },
     
-    finish() {
+    finish(winner) {
       this.highScores.push({
-        name: "Player",
-        score: this.score
+        name: winner.player,
+        score: winner.score
       });
       this.highScores.sort((a, b) => b.score - a.score);
       this.highScores = this.highScores.slice(0, 5);
       localStorage.scores = JSON.stringify(this.highScores);
       this.resultOpen = true;
       var audio_goal=new Audio('/sounds/goal.mp3');
-      audio_goal.play()
+      audio_goal.play();
+      var obj={
+        id:this.getCurrentRoom,
+        winner:winner
+      }
+      socket.emit('set-winner',obj);
+
     },
     restart() {
-      var _maze=maze.make()
-      this.maze=_maze;
+      // this.maze=_maze;
       this.player=maze.generatePlayer('&#128561',maze.P_1);
       this.destination=maze.generatePlayer('&#128536',maze.D);
       this.step = 0;
       this.score = 1000;
       this.resultOpen = false;
       this.hasUsedSP=false;
+    },
+    toLobby(){
+      this.$router.push('/lobby')
     },
     onKeyUp(e){
       if (this.resultOpen) return;
@@ -125,7 +137,11 @@ export default {
         }
         this.score = 1000 - this.step;
         if (this.player.pos.i === this.destination.pos.i && this.player.pos.j === this.destination.pos.j) {
-          this.finish();
+          this.winner={
+            player:this.getCurrentPlayer,
+            score:this.score
+          }
+          this.finish(this.winner);
         }
       }
     },
@@ -146,15 +162,22 @@ export default {
       
   },
   created(){
-    var _maze=maze.make()
-    this.maze=_maze;
+    this.maze=this.getMaze;
+    // var pos=Number(this.$rou te.id);
     this.player=maze.generatePlayer('&#128561',maze.P_1);
     this.destination=maze.generatePlayer('&#128536',maze.D);
+    var self=this;
+    socket.on('get-winner',(winner)=>{
+      console.log('Get winner',winner);
+      self.finish(winner);
+    })
+    window.finish=this.finish;
   },
   mounted(){
     document.onkeyup=this.onKeyUp;
     document.body.style.overflow='hidden';
   },
+  computed: mapGetters(['getMaze','getCurrentPlayer','getCurrentRoom']),
 }
 </script>
 

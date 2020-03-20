@@ -37,7 +37,7 @@ io.on('connection', socket => {
     } else {
       io.emit('room', roomList)
     }
-  })
+  });
 
   socket.on('joinRoom', object => {
     roomList.forEach(room => {
@@ -46,6 +46,16 @@ io.on('connection', socket => {
       }
     })
     io.emit('room', roomList)
+  });
+
+  socket.on('send-maze',object=>{
+    let roomID=object.id;
+    socket.to(roomID).emit('get-maze',object.maze);
+  });
+
+  socket.on('set-winner',object=>{
+    let roomID=object.id;
+    socket.to(roomID).emit('get-winner',object.winner);
   })
   
   socket.on('join', id => {
