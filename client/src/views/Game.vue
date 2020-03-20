@@ -78,7 +78,7 @@ export default {
         id:this.getCurrentRoom,
         winner:winner
       }
-      if (!id) {
+      if (id) {
         socket.emit('set-winner',obj);
       } 
 
@@ -173,7 +173,7 @@ export default {
     var self=this;
     socket.on('get-winner',(winner)=>{
       console.log('Get winner',winner);
-      self.finish(winner, socket.id);
+      self.finish(winner, false);
     })
     window.finish=this.finish;
   },
