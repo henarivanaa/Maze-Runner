@@ -3,6 +3,7 @@
     {{getCurrentRoom}}
     <div v-for="(user, index) in userJoined" :key="index">
       <h4>{{user}}</h4>
+      <h4 v-if="index === 0">-- room master --</h4>
     </div>
     <form @submit.prevent="send" >
       <input type="text" v-model="message">
