@@ -24,14 +24,14 @@
 <script>
 import io from 'socket.io-client'
 import { mapActions, mapGetters } from 'vuex'
-// import RoomCard from '../components/RoomCard.vue'
+import RoomCard from '../components/RoomCard.vue'
 
 const socket = io('http://localhost:3000')
 
 export default {
   name: 'Lobby',
   components: {
-    // RoomCard
+    RoomCard
   },
   created() {
     if (!this.getCurrentPlayer) {
