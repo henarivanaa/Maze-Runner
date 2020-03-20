@@ -50,6 +50,8 @@ io.on('connection', socket => {
   
   socket.on('join', id => {
     socket.join(id)
+    let room = roomList.filter(room => room.id === id)
+    socket.to(id).broadcast.emit('join', room)
   })
 
   socket.on('send-message', room => {

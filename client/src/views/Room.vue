@@ -21,18 +21,25 @@ export default {
   name: 'Room',
   created() {
     socket.emit('join', this.getCurrentRoom)
+    if (this.getCurrentRole === 'host') {
+      this.isHost = true
+    }
+
+    socket.on('join', data => {
+      this.userJoined = data.players
+    })
 
     socket.on('message', message => {
-      console.log(message)
       this.display = message
     })
   },
-  computed: mapGetters(['getCurrentPlayer', 'getRoomList', 'getCurrentRoom']),
+  computed: mapGetters(['getCurrentPlayer', 'getRoomList', 'getCurrentRoom', 'getCurrentRole']),
   data() {
     return {
       message: '',
       display: '',
-      userJoined: []
+      userJoined: [],
+      isHost: false
     }
   },
   methods: {

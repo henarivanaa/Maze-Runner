@@ -8,13 +8,15 @@ export default new Vuex.Store({
     players: [],
     roomList: [],
     currentPlayer: '',
-    currentRoom: null
+    currentRoom: null,
+    currentRole: null,
   },
   getters: {
     getPlayer: state => state.players,
     getRoomList: state => state.roomList,
     getCurrentPlayer: state => state.currentPlayer,
-    getCurrentRoom: state => state.currentRoom
+    getCurrentRoom: state => state.currentRoom,
+    getCurrentRole: state => state.currentRole
   },
   mutations: {
     setPlayer: (state, userData) => {
@@ -31,6 +33,10 @@ export default new Vuex.Store({
 
     setCurrentRoom: (state, roomId) => {
       state.currentRoom = roomId
+    },
+
+    setCurrentRole: (state, role) => {
+      state.currentRole = role
     }
   },
   actions: {
@@ -48,6 +54,10 @@ export default new Vuex.Store({
 
     setCurrentRoom({ commit }, roomId) {
       commit('setCurrentRoom', roomId)
+    },
+
+    setCurrentRole({ commit }, role) {
+      commit('setCurrentRole', role)
     }
   },
   modules: {
