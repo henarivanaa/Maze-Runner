@@ -68,6 +68,8 @@ export default {
       this.highScores = this.highScores.slice(0, 5);
       localStorage.scores = JSON.stringify(this.highScores);
       this.resultOpen = true;
+      var audio_goal=new Audio('/sounds/goal.mp3');
+      audio_goal.play()
     },
     restart() {
       var _maze=maze.make()

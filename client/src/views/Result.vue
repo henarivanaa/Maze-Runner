@@ -1,6 +1,6 @@
 <template>
     <div class="result">
-        <audio src="/sounds/goal.mp3" autoplay></audio>
+        <!-- <audio src="/sounds/goal.mp3" autoplay></audio> -->
         <h1>You Win</h1>
         <h1>{{ score }}</h1>
         <div v-for="(hs, index) in highScores" v-bind:key="index"
