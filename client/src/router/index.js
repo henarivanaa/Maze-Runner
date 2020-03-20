@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 // import Home from '../views/Home.vue'
-import JoinRoom from '../views/JoinRoom.vue'
+// import JoinRoom from '../views/JoinRoom.vue'
 import Room from '../views/Room.vue'
 import Home from '../views/Home.vue'
 import Lobby from '../views/Lobby.vue'
@@ -18,11 +18,11 @@ const routes = [
   //   name: 'Home',
   //   component: Home
   // },
-  {
-    path: '/join',
-    name: 'JoinRoom',
-    component: JoinRoom
-  },
+  // {
+  //   path: '/join',
+  //   name: 'JoinRoom',
+  //   component: JoinRoom
+  // },
   {
     path: '/room',
     name: 'Room',
